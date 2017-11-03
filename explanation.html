@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Everything you wanted to know about Licence to Kill</title>
+	<style type="text/css">body{margin:40px auto;max-width:920px;line-height:1.6;font-size:18px;color:#444;padding:0 10px}h1,h2,h3{line-height:1.2}</style>
+	</head>
+	<body>
+	<header><h1>Everything you wanted to know about Licence to Kill</h1><h2>(but couldn't ask anyone)</h2></header>
+	
+	<p>
+	It started when I saw the recording of Ashens talk at the Norwich Gaming Festival 2016, in particular <a href="https://www.youtube.com/watch?v=6Shmi76Pax8#t=29m30s">the part where he talks about Licence to Kill for the Acorn Electron</a>.
+	</p>
+	<p>That game really piqued my interest. Even more intriguing there was almost no informations about it on the internet. So I decided I would reverse engineer the game and figure out how it worked. In particular I wanted to know:</p>
+	
+	<ol>
+	<li>What was up with the farting black screen at the start.</li>
+	<li>If there was any way to win this game or if you would just keep walking right forever</li>
+	<li>The <a href='http://everygamegoing.com/inlal_front/electron/alternative/tapes/Licence_To_Kill_000.jpg'>cassette tape</a> mentions a "cheat code" that can be entered when the "Press Space To Start" text is scrolling on screen that will have "various effect". I wanted to know what it was and what it did.</li>
+	</ol>
+	
+	<a name='blackscreen'>
+	<h2>The Black Screen of Farts</h2>
+	
+	<p>Let's get the easiest part out of the way. I expected the black screen to be some kind of copy protection mechanism. Nope. It's just drawing circles. For some reason they chose to program this part of the game in BASIC so drawing the circles on the title screen just takes forever.</p>
+	<p>Here's the code, in all its detokenized glory</p>
+	
+	<tt><pre>
+10	VDU 23,220,137,82,186,124,56,36,82,137:
+	FOR I=0TO 4:
+	VDU 19,I,0;0;0;0;:
+	NEXT :
+	FOR I=300TO 0STEP -100:
+	PROC circle(800,500,I,4,5,3):
+	PROC gunfire:
+	NEXT :
+	PROC line(800,500,1200,500):
+	PROC line(800,500,400,500):
+	PROC line(800,500,800,900):
+	PROC line(800,500,800,100):
+
+40	DEF PROC circle(X%,Y%,R,T%,P%,C%):
+	LOCAL J%,A,B,C,D,E:
+	D=0.998026:
+	E=6.27905195E-2:
+	GCOL 0,C%:
+	MOVE X%+R,Y%+C:
+	FOR J%=1TO 100:
+	A=R*D-C*E:
+	B=R*E+C*D:
+	PLOT P%,X%+A,Y%+B:
+	PLOT T%,X%,Y%:
+	MOVE X%+A,Y%+B:
+	R=A:
+	C=B:
+	NEXT :
+	ENDPROC
+	</pre></tt>
+	
+	<p>(I have omitted non-circle related lines from this, this is precious code, wouldn't want to violate Alternative Software's intellectual property)</p>
+	
+	<a name='walkthrough'>
+	<h2>Game Walkthrough</h2>
+	
+	<img src='pressspace.jpg'>
+	
+	<p>Everything in the cassette and in-game instructions is correct (with one minor exception I'll describe later). You can find keys, the Master Spactrum, and all that jazz and win the game. The missing piece of the puzzle that seemingly stumped everyone playing the game (well, everyone who bothered to write about it on the internet, at least) is that the instructions omit some of the controls for the game. I'm here to fix that:</p>
+	
+	<ul>
+	<li>When you are in front of a door press 'O' to open the door. You must be centered exactly and there must be no enemies on screen or this will not work.</li>
+	<li>Once you have pressed 'O' you will have to press 'C' to return to the corridor.</li>
+	</ul>
+	
+	<p>That's it. Inside the doors you will find keys that you can use to open locked doors.</p>
+	
+	<img src='smallkey.jpg'>
+	
+	<p>In some of the rooms you will find computers:</p>
+	
+	<img src='computer.jpg'>
+	
+	<p>If you enter a computer room with a unused tape you will get a mastermind-like minigame:</p>
+	
+	<img src='mastermind.jpg'>
+	
+	<p>You have to finish this minigame in 75 seconds (the instructions say 115 seconds but that's because the person who wrote that doesn't know that a minute is only 60 seconds, not 100 seconds). If you don't guess the 6 digit code in the time limit you will be booted out of the room and can re-enter and try again.</p>
+	<p>If you do guess the code the tape will become used. Repeat this process 6 times, then collect the disc and proceed to the Master Spactrum room:<p>
+	
+	<img src='disc.jpg'>
+	
+	<img src='masterspactrum.jpg'>
+	
+	<p>Finally collect the starter key</p>
+	
+	<img src='bigkey.jpg'>
+	
+	<p>and proceed to the C-7¾ room and you will get the coveted end-game cutscene:</p>
+	
+	<video src='end.mp4' controls preload width=900></video>
+	
+	<a name='ingamecheat'>
+	<h2>The cheat code</h2>
+	
+	<p>Ok, the game is really hard, maybe the cheat code mentioned on the cassette tape will help with that, right?</p>
+	
+	<p>To turn on cheat mode you have to press simultaneously the keys AFCLO while the "Press space to start" text is scrolling.</p>
+	
+	<p>Note that if you are playing on an emulator this may not work because of key shadowing in your keyboard. If you have a gaming keyboard: congratulations, your purchase finally paid off!</p>
+	
+	<p>I'm not sure what that's supposed to mean and how they expected the player to guess but that's how it is. If you do that correctly the game will try to give you an epileptic seizure</p>
+	
+	<video src='naughty.mp4' controls preload width=900></video>
+	
+	<p>If you survive that, you can press BRD (simultaneously) in the game to gain one extra life, all the way up to 255.  As far as I can tell this are the only effects of cheat mode.</p>
+	
+	<a name='cheating'>
+	<h2>How to <em>actually</em> play the game</h2>
+	
+	<p>So the access code minigame is really hard, getting around the building is basically impossible and the cheat code is completely useless and dangerous to your health. How do you actually beat this game? Here's how to really cheat.</p>
+	
+	<p>First load the tape like this:</p>
+	
+	<tt><pre>
+>*LOAD
+>*LOAD
+>130 END
+>RUN
+	</pre></tt>
+	
+	<p>This will run the instructions screen but at the end return you to the prompt instead of loading the game. Once you are back at the prompt:</p>
+	
+	<tt><pre>
+>*LOAD
+>*LOAD
+>W=&1040:!W=&534CEAEA
+>W=&1D17:!W=&001D294C
+>CALL &E00
+	</pre></tt>
+	
+	<p>(yes you have to execute <tt>*LOAD</tt> twice both times, it's not a typo)</tt></p>
+	
+	<img src='cheating.jpg'>
+	
+	<p>The first line starting with <tt>W=</tt> disables death (but only in the game), the second one changes the access code minigame so that any code is accepted.</p>.
+	
+	
+	</body>
+</html>
